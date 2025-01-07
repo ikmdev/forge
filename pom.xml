@@ -1,0 +1,237 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<project xmlns="http://maven.apache.org/POM/4.0.0"
+         xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+         xsi:schemaLocation="http://maven.apache.org/POM/4.0.0 http://maven.apache.org/xsd/maven-4.0.0.xsd">
+    <modelVersion>4.0.0</modelVersion>
+
+    <parent>
+        <groupId>dev.ikm.build</groupId>
+        <artifactId>java-parent</artifactId>
+        <version>1.55.0</version>
+        <relativePath />
+    </parent>
+
+    <groupId>dev.ikm.tinkar</groupId>
+    <artifactId>forge</artifactId>
+    <version>1.0-SNAPSHOT</version>
+    <packaging>jar</packaging>
+
+    <name>Tinkar Forge</name>
+    <description>
+        Tinkar-Forge is a java software project that provides modern template engine capabilities
+        with a tinkar datastore. The backing template engine is an implementation of the Apache Freemarker
+        project.
+    </description>
+
+    <inceptionYear>2024</inceptionYear>
+
+    <licenses>
+        <license>
+            <name>Apache License, Version 2.0</name>
+            <url>https://www.apache.org/licenses/LICENSE-2.0.txt</url>
+            <distribution>repo</distribution>
+            <comments>A business-friendly OSS license</comments>
+        </license>
+    </licenses>
+
+    <scm>
+        <url>https://github.com/ikmdev/forge</url>
+    </scm>
+
+    <developers>
+        <developer>
+            <id>ikmdev</id>
+            <name>IKM Development Team</name>
+            <email>support@ikm.dev</email>
+        </developer>
+    </developers>
+
+    <issueManagement>
+        <system>GitHub</system>
+        <url>https://github.com/ikmdev/forge/issues</url>
+    </issueManagement>
+
+    <url>http://www.ikm.dev</url>
+
+    <organization>
+        <name>Integrated Knowledge Management</name>
+        <url>http://www.ikm.dev</url>
+    </organization>
+
+    <properties>
+        <tinkar-core.version>1.74.0</tinkar-core.version>
+        <slf4j.version>2.0.13</slf4j.version>
+        <log4j.version>3.0.0-alpha1</log4j.version>
+        <tinkar-starter-data.version>1.0.0</tinkar-starter-data.version>
+
+        <!-- JPMS Dependencies -->
+        <tinkar-jpms-deps.groupId>dev.ikm.jpms</tinkar-jpms-deps.groupId>
+        <eclipse-collections.version>11.1.0-r13</eclipse-collections.version>
+        <eclipse-collections-api.version>11.1.0-r11</eclipse-collections-api.version>
+        <freemarker.version>2.3.34</freemarker.version>
+    </properties>
+
+    <!-- All Dependencies and versions used in this project are pre-defined here for use in modules -->
+    <dependencyManagement>
+        <dependencies>
+            <dependency>
+                <groupId>${tinkar-jpms-deps.groupId}</groupId>
+                <artifactId>eclipse-collections-api</artifactId>
+                <version>${eclipse-collections-api.version}</version>
+            </dependency>
+
+            <!-- Data Providers       -->
+            <dependency>
+                <groupId>${project.groupId}</groupId>
+                <artifactId>data-ephemeral-provider</artifactId>
+                <version>${tinkar-core.version}</version>
+            </dependency>
+
+            <!-- Core Libraries       -->
+            <dependency>
+                <groupId>${project.groupId}</groupId>
+                <artifactId>entity-provider</artifactId>
+                <version>${tinkar-core.version}</version>
+            </dependency>
+
+            <dependency>
+                <groupId>${project.groupId}</groupId>
+                <artifactId>executor-provider</artifactId>
+                <version>${tinkar-core.version}</version>
+            </dependency>
+
+            <dependency>
+                <groupId>${project.groupId}</groupId>
+                <artifactId>search-provider</artifactId>
+                <version>${tinkar-core.version}</version>
+            </dependency>
+
+            <dependency>
+                <groupId>org.freemarker</groupId>
+                <artifactId>freemarker</artifactId>
+                <version>${freemarker.version}</version>
+            </dependency>
+
+            <dependency>
+                <groupId>org.slf4j</groupId>
+                <artifactId>slf4j-api</artifactId>
+                <version>${slf4j.version}</version>
+            </dependency>
+
+            <dependency>
+                <groupId>org.apache.logging.log4j</groupId>
+                <artifactId>log4j-slf4j2-impl</artifactId>
+                <version>${log4j.version}</version>
+            </dependency>
+        </dependencies>
+    </dependencyManagement>
+
+    <!-- Cross project dependencies -->
+    <dependencies>
+        <dependency>
+            <groupId>${tinkar-jpms-deps.groupId}</groupId>
+            <artifactId>eclipse-collections-api</artifactId>
+        </dependency>
+
+        <!-- Data Providers       -->
+        <dependency>
+            <groupId>${project.groupId}</groupId>
+            <artifactId>data-ephemeral-provider</artifactId>
+            <scope>test</scope>
+        </dependency>
+
+        <!-- Core Libraries       -->
+        <dependency>
+            <groupId>${project.groupId}</groupId>
+            <artifactId>entity-provider</artifactId>
+        </dependency>
+
+        <dependency>
+            <groupId>org.freemarker</groupId>
+            <artifactId>freemarker</artifactId>
+        </dependency>
+
+        <dependency>
+            <groupId>${project.groupId}</groupId>
+            <artifactId>executor-provider</artifactId>
+        </dependency>
+
+        <dependency>
+            <groupId>${project.groupId}</groupId>
+            <artifactId>search-provider</artifactId>
+        </dependency>
+
+        <dependency>
+            <groupId>org.slf4j</groupId>
+            <artifactId>slf4j-api</artifactId>
+        </dependency>
+
+        <dependency>
+            <groupId>org.apache.logging.log4j</groupId>
+            <artifactId>log4j-slf4j2-impl</artifactId>
+            <scope>test</scope>
+        </dependency>
+
+        <dependency>
+            <groupId>org.junit.jupiter</groupId>
+            <artifactId>junit-jupiter</artifactId>
+            <scope>test</scope>
+        </dependency>
+    </dependencies>
+
+    <build>
+        <plugins>
+            <plugin>
+                <groupId>org.apache.maven.plugins</groupId>
+                <artifactId>maven-dependency-plugin</artifactId>
+                <executions>
+                    <execution>
+                        <id>copy</id>
+                        <phase>process-test-resources</phase>
+                        <goals>
+                            <goal>copy</goal>
+                        </goals>
+                    </execution>
+                </executions>
+                <configuration>
+                    <artifactItems>
+                        <artifactItem>
+                            <groupId>dev.ikm.tinkar.data</groupId>
+                            <artifactId>tinkar-starter-data</artifactId>
+                            <version>${tinkar-starter-data.version}</version>
+                            <classifier>pb</classifier>
+                            <type>zip</type>
+                            <overWrite>false</overWrite>
+                            <outputDirectory>${project.build.directory}/data</outputDirectory>
+                        </artifactItem>
+                    </artifactItems>
+                    <outputDirectory>${project.build.directory}/data</outputDirectory>
+                    <overWriteReleases>false</overWriteReleases>
+                    <overWriteSnapshots>true</overWriteSnapshots>
+                </configuration>
+            </plugin>
+            <plugin>
+                <groupId>org.jacoco</groupId>
+                <artifactId>jacoco-maven-plugin</artifactId>
+                <executions>
+                    <execution>
+                        <id>prepare-agent</id>
+                        <phase>initialize</phase>
+                        <goals>
+                            <goal>prepare-agent</goal>
+                        </goals>
+                    </execution>
+                    <execution>
+                        <id>report</id>
+                        <phase>prepare-package</phase>
+                        <goals>
+                            <goal>report</goal>
+                        </goals>
+                    </execution>
+                </executions>
+            </plugin>
+        </plugins>
+    </build>
+
+    
+</project>

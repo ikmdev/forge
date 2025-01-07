@@ -1,0 +1,69 @@
+@options
+@packages
+-classpath
+'/Users/asills/.m2/repository/dev/ikm/jpms/eclipse-collections-api/11.1.0-r11/eclipse-collections-api-11.1.0-r11.jar:/Users/asills/.m2/repository/dev/ikm/jpms/eclipse-collections/11.1.0-r13/eclipse-collections-11.1.0-r13.jar:/Users/asills/.m2/repository/dev/ikm/jpms/auto-service/1.0.1-r7/auto-service-1.0.1-r7.jar:/Users/asills/.m2/repository/dev/ikm/tinkar/component/1.74.0/component-1.74.0.jar:/Users/asills/.m2/repository/dev/ikm/tinkar/entity-provider/1.74.0/entity-provider-1.74.0.jar:/Users/asills/.m2/repository/dev/ikm/tinkar/entity/1.74.0/entity-1.74.0.jar:/Users/asills/.m2/repository/dev/ikm/tinkar/terms/1.74.0/terms-1.74.0.jar:/Users/asills/.m2/repository/dev/ikm/tinkar/tinkar-schema/1.33.0/tinkar-schema-1.33.0.jar:/Users/asills/.m2/repository/com/github/ben-manes/caffeine/caffeine/3.1.8/caffeine-3.1.8.jar:/Users/asills/.m2/repository/org/checkerframework/checker-qual/3.37.0/checker-qual-3.37.0.jar:/Users/asills/.m2/repository/com/google/errorprone/error_prone_annotations/2.21.1/error_prone_annotations-2.21.1.jar:/Users/asills/.m2/repository/dev/ikm/jpms/protobuf-java/3.22.0-r7/protobuf-java-3.22.0-r7.jar:/Users/asills/.m2/repository/dev/ikm/jpms/activej-bytebuf/4.3-r10/activej-bytebuf-4.3-r10.jar:/Users/asills/.m2/repository/org/jgrapht/jgrapht-core/1.5.0/jgrapht-core-1.5.0.jar:/Users/asills/.m2/repository/dev/ikm/jpms/jheaps/0.14-r6/jheaps-0.14-r6.jar:/Users/asills/.m2/repository/dev/ikm/tinkar/common/1.74.0/common-1.74.0.jar:/Users/asills/.m2/repository/dev/ikm/jpms/roaringbitmap/0.9.31-r8/roaringbitmap-0.9.31-r8.jar:/Users/asills/.m2/repository/dev/ikm/jpms/activej-common/4.3-r8/activej-common-4.3-r8.jar:/Users/asills/.m2/repository/org/freemarker/freemarker/2.3.34/freemarker-2.3.34.jar:/Users/asills/.m2/repository/org/slf4j/slf4j-api/2.0.13/slf4j-api-2.0.13.jar'
+-encoding
+'UTF-8'
+-protected
+--release
+21
+-sourcepath
+'/Users/asills/code/forge/src/main/java:/Users/asills/code/forge/target/generated-sources/annotations'
+-author
+-bottom
+'Copyright &#169; 2024&#x2013;2025 <a href="http://www.ikm.dev">Integrated Knowledge Management</a>. All rights reserved.'
+-charset
+'UTF-8'
+-d
+'/Users/asills/code/forge/target/apidocs'
+-docencoding
+'UTF-8'
+-Xdoclint:none
+-doctitle
+'Tinkar Forge 1.0-SNAPSHOT API'
+-use
+-version
+-windowtitle
+'Tinkar Forge 1.0-SNAPSHOT API'
+dev.ikm.tinkar.forge
+/Users/asills/.m2/repository/dev/ikm/jpms/eclipse-collections-api/11.1.0-r11/eclipse-collections-api-11.1.0-r11.jar = 1727470618000
+/Users/asills/.m2/repository/dev/ikm/jpms/eclipse-collections/11.1.0-r13/eclipse-collections-11.1.0-r13.jar = 1729105242000
+/Users/asills/.m2/repository/dev/ikm/jpms/auto-service/1.0.1-r7/auto-service-1.0.1-r7.jar = 1727470554000
+/Users/asills/.m2/repository/dev/ikm/tinkar/component/1.74.0/component-1.74.0.jar = 1729117171000
+/Users/asills/.m2/repository/dev/ikm/tinkar/entity-provider/1.74.0/entity-provider-1.74.0.jar = 1729117172000
+/Users/asills/.m2/repository/dev/ikm/tinkar/entity/1.74.0/entity-1.74.0.jar = 1729117166000
+/Users/asills/.m2/repository/dev/ikm/tinkar/terms/1.74.0/terms-1.74.0.jar = 1729117170000
+/Users/asills/.m2/repository/dev/ikm/tinkar/tinkar-schema/1.33.0/tinkar-schema-1.33.0.jar = 1727801390000
+/Users/asills/.m2/repository/com/github/ben-manes/caffeine/caffeine/3.1.8/caffeine-3.1.8.jar = 1691561613000
+/Users/asills/.m2/repository/org/checkerframework/checker-qual/3.37.0/checker-qual-3.37.0.jar = 1690910757000
+/Users/asills/.m2/repository/com/google/errorprone/error_prone_annotations/2.21.1/error_prone_annotations-2.21.1.jar = 1691185028000
+/Users/asills/.m2/repository/dev/ikm/jpms/protobuf-java/3.22.0-r7/protobuf-java-3.22.0-r7.jar = 1727471232000
+/Users/asills/.m2/repository/dev/ikm/jpms/activej-bytebuf/4.3-r10/activej-bytebuf-4.3-r10.jar = 1727728973000
+/Users/asills/.m2/repository/org/jgrapht/jgrapht-core/1.5.0/jgrapht-core-1.5.0.jar = 1592201781000
+/Users/asills/.m2/repository/dev/ikm/jpms/jheaps/0.14-r6/jheaps-0.14-r6.jar = 1723847173000
+/Users/asills/.m2/repository/dev/ikm/tinkar/common/1.74.0/common-1.74.0.jar = 1729117164000
+/Users/asills/.m2/repository/dev/ikm/jpms/roaringbitmap/0.9.31-r8/roaringbitmap-0.9.31-r8.jar = 1727471282000
+/Users/asills/.m2/repository/dev/ikm/jpms/activej-common/4.3-r8/activej-common-4.3-r8.jar = 1727470531000
+/Users/asills/.m2/repository/org/freemarker/freemarker/2.3.34/freemarker-2.3.34.jar = 1733668255000
+/Users/asills/.m2/repository/org/slf4j/slf4j-api/2.0.13/slf4j-api-2.0.13.jar = 1712931843000
+/Users/asills/code/forge/src/main/java = 1735925851506
+/Users/asills/code/forge/target/generated-sources/annotations = 1735939361152
+/Users/asills/code/forge/target/apidocs/tag-search-index.js = 1735939363366
+/Users/asills/code/forge/target/apidocs/overview-tree.html = 1735939363360
+/Users/asills/code/forge/target/apidocs/module-search-index.js = 1735939363365
+/Users/asills/code/forge/target/apidocs/index.html = 1735939363371
+/Users/asills/code/forge/target/apidocs/package-search-index.js = 1735939363366
+/Users/asills/code/forge/target/apidocs/link.svg = 1735939363376
+/Users/asills/code/forge/target/apidocs/index-all.html = 1735939363370
+/Users/asills/code/forge/target/apidocs/allpackages-index.html = 1735939363365
+/Users/asills/code/forge/target/apidocs/member-search-index.js = 1735939363366
+/Users/asills/code/forge/target/apidocs/copy.svg = 1735939363375
+/Users/asills/code/forge/target/apidocs/script.js = 1735939363375
+/Users/asills/code/forge/target/apidocs/stylesheet.css = 1735939363374
+/Users/asills/code/forge/target/apidocs/search-page.js = 1735939363377
+/Users/asills/code/forge/target/apidocs/help-doc.html = 1735939363373
+/Users/asills/code/forge/target/apidocs/element-list = 1735939363347
+/Users/asills/code/forge/target/apidocs/search.html = 1735939363371
+/Users/asills/code/forge/target/apidocs/allclasses-index.html = 1735939363364
+/Users/asills/code/forge/target/apidocs/type-search-index.js = 1735939363366
+/Users/asills/code/forge/target/apidocs/search.js = 1735939363377

@@ -1,0 +1,1 @@
+typeSearchIndex = [{"l":"All Classes and Interfaces","u":"allclasses-index.html"},{"p":"dev.ikm.tinkar.forge","l":"Forge"},{"p":"dev.ikm.tinkar.forge","l":"FreemarkerForge"}];updateSearchResults();
