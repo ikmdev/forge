@@ -36,10 +36,10 @@ Here are all the patterns:
 <#--    add global TinkarTerms to reffer too in template-->
 </#list>
 
-Here are all the semantics:
-<#list semantics as semantic>
-    PublicId        -> ${semantic.publicId}
-    Nid             -> ${semantic.nid}
-    Semantic Fast   -> ${semanticGetFast(semantic.nid)}
-    -----------------
-</#list>
+<#--Here are all the semantics:-->
+<#--<#list semantics as semantic>-->
+<#--    PublicId        -> ${semantic.publicId}-->
+<#--    Nid             -> ${semantic.nid}-->
+<#--    Semantic Fast   -> ${semanticGetFast(semantic.nid)}-->
+<#--    ------------------->
+<#--</#list>-->
