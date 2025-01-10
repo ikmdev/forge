@@ -1,6 +1,7 @@
-package dev.ikm.tinkar.forge.wrapper;
+package dev.ikm.tinkar.forge.wrapper.calculator.language;
 
 import dev.ikm.tinkar.coordinate.language.calculator.LanguageCalculator;
+import dev.ikm.tinkar.forge.wrapper.AbstractMethodWrapper;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 

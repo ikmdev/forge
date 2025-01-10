@@ -8,7 +8,6 @@ import dev.ikm.tinkar.coordinate.language.calculator.LanguageCalculatorWithCache
 import dev.ikm.tinkar.coordinate.navigation.NavigationCoordinateRecord;
 import dev.ikm.tinkar.coordinate.navigation.calculator.NavigationCalculator;
 import dev.ikm.tinkar.coordinate.navigation.calculator.NavigationCalculatorWithCache;
-import dev.ikm.tinkar.coordinate.stamp.StampCoordinate;
 import dev.ikm.tinkar.coordinate.stamp.StampCoordinateRecord;
 import dev.ikm.tinkar.coordinate.stamp.calculator.StampCalculator;
 import dev.ikm.tinkar.entity.Entity;
@@ -18,22 +17,22 @@ import dev.ikm.tinkar.entity.load.LoadEntitiesFromProtobufFile;
 import dev.ikm.tinkar.forge.Forge;
 import dev.ikm.tinkar.forge.TinkarForge;
 import org.eclipse.collections.api.factory.Lists;
-import org.eclipse.collections.api.list.ImmutableList;
 import org.junit.jupiter.api.AfterAll;
 import org.junit.jupiter.api.BeforeAll;
 import org.junit.jupiter.api.Test;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 
 import java.io.File;
 import java.io.OutputStreamWriter;
 import java.io.Writer;
-import java.net.URI;
-import java.net.URISyntaxException;
 import java.nio.file.Path;
-import java.nio.file.Paths;
 import java.util.function.Function;
 import java.util.stream.Stream;
 
 public class ForgeIT {
+
+    private final Logger LOG = LoggerFactory.getLogger(ForgeIT.class);
 
     public static final Function<String, File> createFilePathInTarget = (pathName) -> new File("%s/target/%s".formatted(System.getProperty("user.dir"), pathName));
     public static final File PB_STARTER_DATA = createFilePathInTarget.apply("data/tinkar-starter-data-1.0.0-pb.zip");
@@ -42,6 +41,7 @@ public class ForgeIT {
     private static StampCalculator stampCalculator;
     private static LanguageCalculator languageCalculator;
     private static NavigationCalculator navigationCalculator;
+
 
     @BeforeAll
     public static void beforeAll() {
@@ -65,17 +65,31 @@ public class ForgeIT {
     }
 
     @Test
-    public void test() {
+    public void simpleTestTemplate() {
+        final String testTemplate = "test.ftl";
+        long startTime = System.nanoTime();
 
         Stream.Builder<Entity<? extends EntityVersion>> conceptStreamBuilder = Stream.builder();
         PrimitiveData.get().forEachConceptNid(conceptNid -> conceptStreamBuilder.add(Entity.getFast(conceptNid)));
+        Stream.Builder<Entity<? extends EntityVersion>> semanticStreamBuilder = Stream.builder();
+        PrimitiveData.get().forEachSemanticNid(conceptNid -> semanticStreamBuilder.add(Entity.getFast(conceptNid)));
+        Stream.Builder<Entity<? extends EntityVersion>> patternStreamBuilder = Stream.builder();
+        PrimitiveData.get().forEachPatternNid(conceptNid -> patternStreamBuilder.add(Entity.getFast(conceptNid)));
 
         Writer out = new OutputStreamWriter(System.out);
-
         Forge forge = new TinkarForge(stampCalculator, languageCalculator, navigationCalculator)
                 .config(TEMPLATES_DIRECTORY)
-                .data(conceptStreamBuilder.build())
-                .template("test.ftl", out);
+                .data("concepts", conceptStreamBuilder.build())
+                .data("semantics", semanticStreamBuilder.build())
+                .data("patterns", patternStreamBuilder.build())
+                .template(testTemplate, out);
         forge.execute();
+
+
+        long endTime = System.nanoTime();
+        double elapsedTime = (double) (endTime - startTime) / 1000_000_000;
+
+        LOG.info("Elapsed Time (s): {}", elapsedTime);
     }
+
 }
