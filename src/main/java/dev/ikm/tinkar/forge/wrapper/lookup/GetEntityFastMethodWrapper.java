@@ -1,6 +1,5 @@
-package dev.ikm.tinkar.forge.wrapper.lookup.chronology;
+package dev.ikm.tinkar.forge.wrapper.lookup;
 
-import dev.ikm.tinkar.coordinate.stamp.calculator.StampCalculator;
 import dev.ikm.tinkar.entity.Entity;
 import dev.ikm.tinkar.entity.EntityVersion;
 import dev.ikm.tinkar.forge.wrapper.AbstractMethodWrapper;
@@ -9,13 +8,13 @@ import org.slf4j.LoggerFactory;
 
 import java.util.List;
 
-public class EntityGetFastMethodWrapper extends AbstractMethodWrapper {
+public class GetEntityFastMethodWrapper extends AbstractMethodWrapper {
 
-    private final Logger LOG = LoggerFactory.getLogger(EntityGetFastMethodWrapper.class);
+    private final Logger LOG = LoggerFactory.getLogger(GetEntityFastMethodWrapper.class);
 
     @Override
     public Entity<? extends EntityVersion> exec(List list) {
-        int nid = extractNidFromParameters(list);
+        int nid = extractNid(list);
         return Entity.getFast(nid);
     }
 }

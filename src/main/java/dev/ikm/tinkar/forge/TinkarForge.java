@@ -5,12 +5,13 @@ import dev.ikm.tinkar.coordinate.navigation.calculator.NavigationCalculator;
 import dev.ikm.tinkar.coordinate.stamp.calculator.StampCalculator;
 import dev.ikm.tinkar.entity.Entity;
 import dev.ikm.tinkar.entity.EntityVersion;
-import dev.ikm.tinkar.forge.wrapper.lookup.chronology.*;
-import dev.ikm.tinkar.forge.wrapper.calculator.navigation.AncestorsOfMethodWrapper;
-import dev.ikm.tinkar.forge.wrapper.calculator.navigation.ChildrenOfNavigationMethodWrapper;
-import dev.ikm.tinkar.forge.wrapper.calculator.language.DescriptionTextMethodWrapper;
-import dev.ikm.tinkar.forge.wrapper.calculator.navigation.DescendentsOfMethodWrapper;
-import dev.ikm.tinkar.forge.wrapper.calculator.navigation.ParentsOfNavigationMethodWrapper;
+import dev.ikm.tinkar.forge.wrapper.lookup.*;
+import dev.ikm.tinkar.forge.wrapper.calculator.TextMethodWrapper;
+import dev.ikm.tinkar.forge.wrapper.calculator.AncestorsOfMethodWrapper;
+import dev.ikm.tinkar.forge.wrapper.calculator.ChildrenOfMethodWrapper;
+import dev.ikm.tinkar.forge.wrapper.calculator.DescendentsOfMethodWrapper;
+import dev.ikm.tinkar.forge.wrapper.calculator.ParentsOfMethodWrapper;
+import dev.ikm.tinkar.forge.wrapper.semantic.DescriptionsForMethodWrapper;
 import dev.ikm.tinkar.terms.EntityProxy;
 import freemarker.template.*;
 import org.slf4j.Logger;
@@ -28,20 +29,42 @@ public class TinkarForge implements Forge {
 
     private final Logger LOG = LoggerFactory.getLogger(TinkarForge.class);
 
-    private final StampCalculator stampCalculator;
-    private final LanguageCalculator languageCalculator;
-    private final NavigationCalculator navigationCalculator;
     private final Configuration configuration;
     private Template template;
     private Writer output;
     private final Map<String, Object> dataModel;
 
     public TinkarForge(StampCalculator stampCalculator, LanguageCalculator languageCalculator, NavigationCalculator navigationCalculator) {
-        this.stampCalculator = stampCalculator;
-        this.languageCalculator = languageCalculator;
-        this.navigationCalculator = navigationCalculator;
         this.dataModel = new HashMap<>();
         this.configuration = new Configuration(Configuration.VERSION_2_3_34);
+        setInternalMethodWrappers();
+        setInternalCalculatorsVariables(stampCalculator, languageCalculator, navigationCalculator);
+    }
+
+    private void setInternalMethodWrappers() {
+        configuration.setSharedVariable("textOf", new TextMethodWrapper());
+        configuration.setSharedVariable("parentsOf", new ParentsOfMethodWrapper());
+        configuration.setSharedVariable("childrenOf", new ChildrenOfMethodWrapper());
+        configuration.setSharedVariable("ancestorsOf", new AncestorsOfMethodWrapper());
+        configuration.setSharedVariable("descendantsOf", new DescendentsOfMethodWrapper());
+        configuration.setSharedVariable("getEntity", new GetEntityFastMethodWrapper());
+        configuration.setSharedVariable("getConcept", new GetConceptFastMethodWrapper());
+        configuration.setSharedVariable("getSemantic", new GetSemanticFastMethodWrapper());
+        configuration.setSharedVariable("getPattern", new GetPatternFastMethodWrapper());
+        configuration.setSharedVariable("getSTAMP", new GetSTAMPFastMethodWrapper());
+        configuration.setSharedVariable("descriptionsFor", new DescriptionsForMethodWrapper());
+    }
+
+    private void setInternalCalculatorsVariables(StampCalculator stampCalculator,
+                                                 LanguageCalculator languageCalculator,
+                                                 NavigationCalculator navigationCalculator) {
+        try {
+            configuration.setSharedVariable("defaultSTAMPCalc", stampCalculator);
+            configuration.setSharedVariable("defaultLanguageCalc", languageCalculator);
+            configuration.setSharedVariable("defaultNavigationCalc", navigationCalculator);
+        } catch (TemplateModelException e) {
+            throw new RuntimeException(e);
+        }
     }
 
     @Override
@@ -57,16 +80,6 @@ public class TinkarForge implements Forge {
             config.setWrapUncheckedExceptions(true);
             config.setFallbackOnNullLoopVariable(false);
             config.setSQLDateAndTimeTimeZone(TimeZone.getDefault());
-            config.setSharedVariable("description", new DescriptionTextMethodWrapper(languageCalculator));
-            config.setSharedVariable("parentsOf", new ParentsOfNavigationMethodWrapper(navigationCalculator));
-            config.setSharedVariable("childrenOf", new ChildrenOfNavigationMethodWrapper(navigationCalculator));
-            config.setSharedVariable("ancestorsOf", new AncestorsOfMethodWrapper(navigationCalculator));
-            config.setSharedVariable("descendantsOf", new DescendentsOfMethodWrapper(navigationCalculator));
-            config.setSharedVariable("entityGetFast", new EntityGetFastMethodWrapper());
-            config.setSharedVariable("conceptGetFast", new ConceptGetFastMethodWrapper());
-            config.setSharedVariable("semanticGetFast", new SemanticGetFastMethodWrapper());
-            config.setSharedVariable("patternGetFast", new PatternGetFastMethodWrapper());
-            config.setSharedVariable("stampGetFast", new STAMPGetFastMethodWrapper());
         });
     }
 
@@ -133,6 +146,39 @@ public class TinkarForge implements Forge {
             configuration.setSharedVariable(name, semantic);
         } catch (TemplateModelException e) {
             LOG.error("Semantic variable wasn't set correctly!", e);
+            throw new RuntimeException(e);
+        }
+        return this;
+    }
+
+    @Override
+    public Forge variable(String name, StampCalculator stampCalculator) {
+        try {
+            configuration.setSharedVariable(name, stampCalculator);
+        } catch (TemplateModelException e) {
+            LOG.error("STAMP Calculator variable wasn't set correctly!", e);
+            throw new RuntimeException(e);
+        }
+        return this;
+    }
+
+    @Override
+    public Forge variable(String name, LanguageCalculator languageCalculator) {
+        try {
+            configuration.setSharedVariable(name, languageCalculator);
+        } catch (TemplateModelException e) {
+            LOG.error("STAMP Calculator variable wasn't set correctly!", e);
+            throw new RuntimeException(e);
+        }
+        return this;
+    }
+
+    @Override
+    public Forge variable(String name, NavigationCalculator navigationCalculator) {
+        try {
+            configuration.setSharedVariable(name, navigationCalculator);
+        } catch (TemplateModelException e) {
+            LOG.error("STAMP Calculator variable wasn't set correctly!", e);
             throw new RuntimeException(e);
         }
         return this;
