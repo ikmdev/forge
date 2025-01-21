@@ -28,7 +28,6 @@ import org.slf4j.LoggerFactory;
 
 import java.io.File;
 import java.io.OutputStreamWriter;
-import java.io.Writer;
 import java.nio.file.Path;
 import java.util.Set;
 import java.util.function.Function;
@@ -42,9 +41,9 @@ public class SimpleForgeIT {
     public static final File PB_STARTER_DATA = createFilePathInTarget.apply("data/tinkar-starter-data-1.0.0-pb.zip");
     public static final Path TEMPLATES_DIRECTORY = new File(SimpleForgeIT.class.getClassLoader().getResource("templates").getFile()).toPath();
 
-    private static StampCalculator stampCalculator;
-    private static LanguageCalculator languageCalculator;
-    private static NavigationCalculator navigationCalculator;
+    private static StampCalculator STAMP_CALCULATOR;
+    private static LanguageCalculator LANGUAGE_CALCULATOR;
+    private static NavigationCalculator NAVIGATION_CALCULATOR;
 
 
     @BeforeAll
@@ -52,15 +51,16 @@ public class SimpleForgeIT {
         CachingService.clearAll();
         PrimitiveData.selectControllerByName("Load Ephemeral Store");
         PrimitiveData.start();
-        EntityCountSummary entityCountSummary = new LoadEntitiesFromProtobufFile(PB_STARTER_DATA).compute();
+        LoadEntitiesFromProtobufFile loadEntitiesFromProtobufFile = new LoadEntitiesFromProtobufFile(PB_STARTER_DATA);
+        loadEntitiesFromProtobufFile.compute();
 
         var languageList = Lists.mutable.of(Coordinates.Language.UsEnglishFullyQualifiedName()).toImmutableList();
         StampCoordinateRecord stampCoordinateRecord = Coordinates.Stamp.DevelopmentLatest();
         NavigationCoordinateRecord navigationCoordinateRecord = Coordinates.Navigation.stated().toNavigationCoordinateRecord();
 
-        stampCalculator = stampCoordinateRecord.stampCalculator();
-        languageCalculator = LanguageCalculatorWithCache.getCalculator(stampCoordinateRecord, languageList );
-        navigationCalculator = NavigationCalculatorWithCache.getCalculator(stampCoordinateRecord, languageList, navigationCoordinateRecord);
+        STAMP_CALCULATOR = stampCoordinateRecord.stampCalculator();
+        LANGUAGE_CALCULATOR = LanguageCalculatorWithCache.getCalculator(stampCoordinateRecord, languageList );
+        NAVIGATION_CALCULATOR = NavigationCalculatorWithCache.getCalculator(stampCoordinateRecord, languageList, navigationCoordinateRecord);
     }
 
     @AfterAll
@@ -80,22 +80,23 @@ public class SimpleForgeIT {
         Stream.Builder<Entity<? extends EntityVersion>> patternStreamBuilder = Stream.builder();
         PrimitiveData.get().forEachPatternNid(conceptNid -> patternStreamBuilder.add(Entity.getFast(conceptNid)));
 
-        //Make Premundane STAMP Calculator
+        //Make Pre-mundane STAMP Calculator
         var primordialSTAMPCoordinate = StampCoordinateRecord.make(StateSet.ACTIVE,
                 TinkarTerm.PRIMORDIAL_PATH.nid(),
                 Set.of(ConceptFacade.make(TinkarTerm.PRIMORDIAL_MODULE.nid())));
 
-        Writer out = new OutputStreamWriter(System.out);
-        new TinkarForge(stampCalculator, languageCalculator, navigationCalculator)
-                .config(TEMPLATES_DIRECTORY)
+        Forge simpleForge = new TinkarForge();
+        simpleForge.config(TEMPLATES_DIRECTORY)
                 .data("concepts", conceptStreamBuilder.build())
                 .data("semantics", semanticStreamBuilder.build())
                 .data("patterns", patternStreamBuilder.build())
                 .variable("stringFieldConcept", TinkarTerm.STRING_FIELD)
                 .variable("textPattern", TinkarTerm.DESCRIPTION_PATTERN)
-                .variable("mySTAMPCalc", stampCalculator)
+                .variable("defaultSTAMPCalc", STAMP_CALCULATOR)
+                .variable("defaultLanguageCalc", LANGUAGE_CALCULATOR)
+                .variable("defaultNavigationCalc", NAVIGATION_CALCULATOR)
                 .variable("primordialSTAMPCalc", primordialSTAMPCoordinate.stampCalculator())
-                .template(testTemplate, out)
+                .template(testTemplate, new OutputStreamWriter(System.out))
                 .execute();
 
         long endTime = System.nanoTime();

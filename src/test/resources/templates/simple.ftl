@@ -19,7 +19,7 @@ Here are all the concept:
     <#list ancestorsOf(concept.nid, defaultNavigationCalc) as ancestorNid>
     Ancestor        -> ${textOf(ancestorNid, defaultLanguageCalc)}
     </#list>
-    <#list descendantsOf(concept.nid, defaultNavigationCalc) as descendantNid>
+    <#list descendentsOf(concept.nid, defaultNavigationCalc) as descendantNid>
     Descendant      -> ${textOf(descendantNid, defaultLanguageCalc)}
     </#list>
     Entity Fast     -> ${getEntity(concept.nid)}
@@ -49,9 +49,12 @@ Here are all the semantics:
 </#list>
 
 Here is a Description Semantic for a concept:
+${defaultSTAMPCalc}
 <#list descriptionsFor(singleConceptNid, defaultSTAMPCalc) as description>
     ${description}
 </#list>
+Here is a Description Semantic for a concept:
+${primordialSTAMPCalc}
 <#list descriptionsFor(singleConceptNid, primordialSTAMPCalc) as description>
     ${description}
 </#list>
