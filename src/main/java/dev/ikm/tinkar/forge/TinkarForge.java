@@ -5,12 +5,7 @@ import dev.ikm.tinkar.coordinate.navigation.calculator.NavigationCalculator;
 import dev.ikm.tinkar.coordinate.stamp.calculator.StampCalculator;
 import dev.ikm.tinkar.entity.Entity;
 import dev.ikm.tinkar.entity.EntityVersion;
-import dev.ikm.tinkar.forge.wrapper.lookup.chronology.*;
-import dev.ikm.tinkar.forge.wrapper.calculator.navigation.AncestorsOfMethodWrapper;
-import dev.ikm.tinkar.forge.wrapper.calculator.navigation.ChildrenOfNavigationMethodWrapper;
-import dev.ikm.tinkar.forge.wrapper.calculator.language.DescriptionTextMethodWrapper;
-import dev.ikm.tinkar.forge.wrapper.calculator.navigation.DescendentsOfMethodWrapper;
-import dev.ikm.tinkar.forge.wrapper.calculator.navigation.ParentsOfNavigationMethodWrapper;
+import dev.ikm.tinkar.forge.wrapper.ForgeMethodWrapper;
 import dev.ikm.tinkar.terms.EntityProxy;
 import freemarker.template.*;
 import org.slf4j.Logger;
@@ -21,6 +16,7 @@ import java.io.Writer;
 import java.nio.file.Path;
 import java.util.HashMap;
 import java.util.Map;
+import java.util.ServiceLoader;
 import java.util.TimeZone;
 import java.util.stream.Stream;
 
@@ -28,28 +24,33 @@ public class TinkarForge implements Forge {
 
     private final Logger LOG = LoggerFactory.getLogger(TinkarForge.class);
 
-    private final StampCalculator stampCalculator;
-    private final LanguageCalculator languageCalculator;
-    private final NavigationCalculator navigationCalculator;
     private final Configuration configuration;
     private Template template;
     private Writer output;
     private final Map<String, Object> dataModel;
+    private final Version configurationVersion = Configuration.VERSION_2_3_34;
 
-    public TinkarForge(StampCalculator stampCalculator, LanguageCalculator languageCalculator, NavigationCalculator navigationCalculator) {
-        this.stampCalculator = stampCalculator;
-        this.languageCalculator = languageCalculator;
-        this.navigationCalculator = navigationCalculator;
+    public TinkarForge() {
         this.dataModel = new HashMap<>();
-        this.configuration = new Configuration(Configuration.VERSION_2_3_34);
+        this.configuration = new Configuration(configurationVersion);
+        loadInternalMethodWrappers();
+    }
+
+    private void loadInternalMethodWrappers() {
+        ServiceLoader.load(ForgeMethodWrapper.class)
+                .stream()
+                .forEach(abstractMethodWrapperProvider -> {
+                        ForgeMethodWrapper forgeMethodWrapper = abstractMethodWrapperProvider.get();
+                        String className = forgeMethodWrapper.getClass().getSimpleName();
+                        char firstChar = className.charAt(0);
+                        String methodName = className.replace(firstChar, Character.toLowerCase(firstChar));
+                        configuration.setSharedVariable(methodName, abstractMethodWrapperProvider.get());
+                });
     }
 
     @Override
     public Forge config(Path templatesDirectory) {
         return config(config -> {
-            DefaultObjectWrapperBuilder owb = new DefaultObjectWrapperBuilder(Configuration.VERSION_2_3_34);
-            owb.setIterableSupport(true);
-            config.setObjectWrapper(owb.build());
             config.setDirectoryForTemplateLoading(templatesDirectory.toFile());
             config.setDefaultEncoding("UTF-8");
             config.setTemplateExceptionHandler(TemplateExceptionHandler.RETHROW_HANDLER);
@@ -57,16 +58,6 @@ public class TinkarForge implements Forge {
             config.setWrapUncheckedExceptions(true);
             config.setFallbackOnNullLoopVariable(false);
             config.setSQLDateAndTimeTimeZone(TimeZone.getDefault());
-            config.setSharedVariable("description", new DescriptionTextMethodWrapper(languageCalculator));
-            config.setSharedVariable("parentsOf", new ParentsOfNavigationMethodWrapper(navigationCalculator));
-            config.setSharedVariable("childrenOf", new ChildrenOfNavigationMethodWrapper(navigationCalculator));
-            config.setSharedVariable("ancestorsOf", new AncestorsOfMethodWrapper(navigationCalculator));
-            config.setSharedVariable("descendantsOf", new DescendentsOfMethodWrapper(navigationCalculator));
-            config.setSharedVariable("entityGetFast", new EntityGetFastMethodWrapper());
-            config.setSharedVariable("conceptGetFast", new ConceptGetFastMethodWrapper());
-            config.setSharedVariable("semanticGetFast", new SemanticGetFastMethodWrapper());
-            config.setSharedVariable("patternGetFast", new PatternGetFastMethodWrapper());
-            config.setSharedVariable("stampGetFast", new STAMPGetFastMethodWrapper());
         });
     }
 
@@ -74,6 +65,9 @@ public class TinkarForge implements Forge {
     public Forge config(ForgeConfig forgeConfig) {
         try {
             forgeConfig.accept(configuration);
+            DefaultObjectWrapperBuilder owb = new DefaultObjectWrapperBuilder(configurationVersion);
+            owb.setIterableSupport(true);
+            configuration.setObjectWrapper(owb.build());
         } catch (TemplateModelException | IOException e) {
             LOG.error("Issue with configuration of Forge!", e);
             throw new RuntimeException(e);
@@ -139,11 +133,44 @@ public class TinkarForge implements Forge {
     }
 
     @Override
+    public Forge variable(String name, StampCalculator stampCalculator) {
+        try {
+            configuration.setSharedVariable(name, stampCalculator);
+        } catch (TemplateModelException e) {
+            LOG.error("StampCalculator variable wasn't set correctly!", e);
+            throw new RuntimeException(e);
+        }
+        return this;
+    }
+
+    @Override
+    public Forge variable(String name, LanguageCalculator languageCalculator) {
+        try {
+            configuration.setSharedVariable(name, languageCalculator);
+        } catch (TemplateModelException e) {
+            LOG.error("LanguageCalculator variable wasn't set correctly!", e);
+            throw new RuntimeException(e);
+        }
+        return this;
+    }
+
+    @Override
+    public Forge variable(String name, NavigationCalculator navigationCalculator) {
+        try {
+            configuration.setSharedVariable(name, navigationCalculator);
+        } catch (TemplateModelException e) {
+            LOG.error("NavigationCalculator variable wasn't set correctly!", e);
+            throw new RuntimeException(e);
+        }
+        return this;
+    }
+
+    @Override
     public Forge execute() {
         try {
             template.process(dataModel, output);
         } catch (TemplateException | IOException e) {
-            LOG.error("Error with Execution of Forge", e);
+            LOG.error("Error with executing Forge instance!", e);
             throw new RuntimeException(e);
         }
         return this;
