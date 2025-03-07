@@ -1,20 +1,19 @@
-package dev.ikm.tinkar.forge.wrapper;
+package dev.ikm.tinkar.forge;
 
 import dev.ikm.tinkar.common.service.PrimitiveData;
 import dev.ikm.tinkar.coordinate.stamp.calculator.Latest;
 import dev.ikm.tinkar.coordinate.stamp.calculator.StampCalculator;
 import dev.ikm.tinkar.entity.SemanticEntityVersion;
-import dev.ikm.tinkar.terms.EntityProxy.Pattern;
+import dev.ikm.tinkar.forge.wrapper.MethodWrapper;
 import freemarker.ext.beans.GenericObjectModel;
 import freemarker.template.SimpleNumber;
-import freemarker.template.TemplateMethodModelEx;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
 import java.util.ArrayList;
 import java.util.List;
 
-public abstract class ForgeMethodWrapper implements TemplateMethodModelEx {
+public abstract class ForgeMethodWrapper implements MethodWrapper {
 
     private final Logger LOG = LoggerFactory.getLogger(ForgeMethodWrapper.class);
 
@@ -27,11 +26,10 @@ public abstract class ForgeMethodWrapper implements TemplateMethodModelEx {
     }
 
     public List<SemanticEntityVersion> calculateLatestSemanticVersions(SimpleNumber simpleNumber,
-                                                                       GenericObjectModel genericObjectModel,
+                                                                       StampCalculator stampCalculator,
                                                                        int patternNid) {
         List<SemanticEntityVersion> semanticEntityVersions = new ArrayList<>();
         int componentNid = convertSimpleNumber(simpleNumber);
-        StampCalculator stampCalculator = convertGenericObjectModel(genericObjectModel, StampCalculator.class);
         PrimitiveData.get().forEachSemanticNidForComponentOfPattern(componentNid, patternNid, semanticNid ->{
             Latest<SemanticEntityVersion> semanticEntityVersionLatest = stampCalculator.latest(semanticNid);
             if (semanticEntityVersionLatest.isPresent()) {

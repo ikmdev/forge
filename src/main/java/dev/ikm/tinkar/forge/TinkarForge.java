@@ -5,7 +5,6 @@ import dev.ikm.tinkar.coordinate.navigation.calculator.NavigationCalculator;
 import dev.ikm.tinkar.coordinate.stamp.calculator.StampCalculator;
 import dev.ikm.tinkar.entity.Entity;
 import dev.ikm.tinkar.entity.EntityVersion;
-import dev.ikm.tinkar.forge.wrapper.ForgeMethodWrapper;
 import dev.ikm.tinkar.terms.EntityProxy;
 import freemarker.template.*;
 import org.slf4j.Logger;
@@ -41,10 +40,7 @@ public class TinkarForge implements Forge {
                 .stream()
                 .forEach(abstractMethodWrapperProvider -> {
                         ForgeMethodWrapper forgeMethodWrapper = abstractMethodWrapperProvider.get();
-                        String className = forgeMethodWrapper.getClass().getSimpleName();
-                        char firstChar = className.charAt(0);
-                        String methodName = className.replace(firstChar, Character.toLowerCase(firstChar));
-                        configuration.setSharedVariable(methodName, abstractMethodWrapperProvider.get());
+                        configuration.setSharedVariable(forgeMethodWrapper.methodName(), abstractMethodWrapperProvider.get());
                 });
     }
 
@@ -82,8 +78,8 @@ public class TinkarForge implements Forge {
     }
 
     @Override
-    public Forge function(String name, TemplateMethodModelEx methodWrapper) {
-        configuration.setSharedVariable(name, methodWrapper);
+    public Forge function(String name, ForgeMethodWrapper forgeMethodWrapper) {
+        configuration.setSharedVariable(name, forgeMethodWrapper);
         return this;
     }
 

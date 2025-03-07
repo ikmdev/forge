@@ -2,6 +2,8 @@ package dev.ikm.tinkar.forge.test;
 
 import dev.ikm.tinkar.common.service.CachingService;
 import dev.ikm.tinkar.common.service.PrimitiveData;
+import dev.ikm.tinkar.common.service.ServiceKeys;
+import dev.ikm.tinkar.common.service.ServiceProperties;
 import dev.ikm.tinkar.coordinate.Coordinates;
 import dev.ikm.tinkar.coordinate.language.calculator.LanguageCalculator;
 import dev.ikm.tinkar.coordinate.language.calculator.LanguageCalculatorWithCache;
@@ -27,6 +29,7 @@ import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
 import java.io.File;
+import java.io.FileOutputStream;
 import java.io.OutputStreamWriter;
 import java.nio.file.Path;
 import java.util.Set;
@@ -49,10 +52,13 @@ public class SimpleForgeIT {
     @BeforeAll
     public static void beforeAll() {
         CachingService.clearAll();
-        PrimitiveData.selectControllerByName("Load Ephemeral Store");
+//        PrimitiveData.selectControllerByName("Load Ephemeral Store");
+        ServiceProperties.set(ServiceKeys.DATA_STORE_ROOT, new File("/Users/aks8m/Solor/snomedct-international"));
+        PrimitiveData.selectControllerByName("Open SpinedArrayStore");
         PrimitiveData.start();
-        LoadEntitiesFromProtobufFile loadEntitiesFromProtobufFile = new LoadEntitiesFromProtobufFile(PB_STARTER_DATA);
-        loadEntitiesFromProtobufFile.compute();
+
+//        LoadEntitiesFromProtobufFile loadEntitiesFromProtobufFile = new LoadEntitiesFromProtobufFile(PB_STARTER_DATA);
+//        loadEntitiesFromProtobufFile.compute();
 
         var languageList = Lists.mutable.of(Coordinates.Language.UsEnglishFullyQualifiedName()).toImmutableList();
         StampCoordinateRecord stampCoordinateRecord = Coordinates.Stamp.DevelopmentLatest();
@@ -85,19 +91,24 @@ public class SimpleForgeIT {
                 TinkarTerm.PRIMORDIAL_PATH.nid(),
                 Set.of(ConceptFacade.make(TinkarTerm.PRIMORDIAL_MODULE.nid())));
 
-        Forge simpleForge = new TinkarForge();
-        simpleForge.config(TEMPLATES_DIRECTORY)
-                .data("concepts", conceptStreamBuilder.build())
-                .data("semantics", semanticStreamBuilder.build())
-                .data("patterns", patternStreamBuilder.build())
-                .variable("stringFieldConcept", TinkarTerm.STRING_FIELD)
-                .variable("textPattern", TinkarTerm.DESCRIPTION_PATTERN)
-                .variable("defaultSTAMPCalc", STAMP_CALCULATOR)
-                .variable("defaultLanguageCalc", LANGUAGE_CALCULATOR)
-                .variable("defaultNavigationCalc", NAVIGATION_CALCULATOR)
-                .variable("primordialSTAMPCalc", primordialSTAMPCoordinate.stampCalculator())
-                .template(testTemplate, new OutputStreamWriter(System.out))
-                .execute();
+        try (FileOutputStream fos = new FileOutputStream(createFilePathInTarget.apply("simpleTestTemplate.txt"))) {
+
+            Forge simpleForge = new TinkarForge();
+            simpleForge.config(TEMPLATES_DIRECTORY)
+                    .data("concepts", conceptStreamBuilder.build())
+                    .data("semantics", semanticStreamBuilder.build())
+                    .data("patterns", patternStreamBuilder.build())
+                    .variable("stringFieldConcept", TinkarTerm.STRING_FIELD)
+                    .variable("textPattern", TinkarTerm.DESCRIPTION_PATTERN)
+                    .variable("defaultSTAMPCalc", STAMP_CALCULATOR)
+                    .variable("defaultLanguageCalc", LANGUAGE_CALCULATOR)
+                    .variable("defaultNavigationCalc", NAVIGATION_CALCULATOR)
+                    .variable("primordialSTAMPCalc", primordialSTAMPCoordinate.stampCalculator())
+                    .template(testTemplate, new OutputStreamWriter(fos))
+                    .execute();
+        } catch (Exception e) {
+            e.printStackTrace();
+        }
 
         long endTime = System.nanoTime();
         double elapsedTime = (double) (endTime - startTime) / 1000_000_000;

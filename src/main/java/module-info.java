@@ -1,5 +1,3 @@
-import dev.ikm.tinkar.forge.wrapper.*;
-
 module dev.ikm.tinkar.forge {
     requires dev.ikm.jpms.eclipse.collections.api;
     requires dev.ikm.tinkar.coordinate;
@@ -10,21 +8,21 @@ module dev.ikm.tinkar.forge {
 
     exports dev.ikm.tinkar.forge;
 
-    uses ForgeMethodWrapper;
-    provides ForgeMethodWrapper with
+    uses dev.ikm.tinkar.forge.ForgeMethodWrapper;
+    provides dev.ikm.tinkar.forge.ForgeMethodWrapper with
             //Navigation Calculator Methods
-            AncestorsOf,
-            ChildrenOf,
-            ParentsOf,
-            DescendentsOf,
+            dev.ikm.tinkar.forge.wrapper.of.AncestorsOf,
+            dev.ikm.tinkar.forge.wrapper.of.ChildrenOf,
+            dev.ikm.tinkar.forge.wrapper.of.ParentsOf,
+            dev.ikm.tinkar.forge.wrapper.of.DescendentsOf,
             //Language Calculator Methods
-            TextOf,
+            dev.ikm.tinkar.forge.wrapper.of.TextOf,
             //Entity Service Component Lookup Methods
-            GetConcept,
-            GetEntity,
-            GetPattern,
-            GetSemantic,
-            GetSTAMP,
+            dev.ikm.tinkar.forge.wrapper.get.ConceptGet,
+            dev.ikm.tinkar.forge.wrapper.get.EntityGet,
+            dev.ikm.tinkar.forge.wrapper.get.PatternGet,
+            dev.ikm.tinkar.forge.wrapper.get.SemanticGet,
+            dev.ikm.tinkar.forge.wrapper.get.StampGet,
             //Specific Semantic Lookup Methods
-            DescriptionsFor;
+            dev.ikm.tinkar.forge.wrapper.on.DescriptionsOn;
 }

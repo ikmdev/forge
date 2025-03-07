@@ -1,18 +1,19 @@
-package dev.ikm.tinkar.forge.wrapper;
+package dev.ikm.tinkar.forge.wrapper.get;
 
 import dev.ikm.tinkar.entity.Entity;
 import dev.ikm.tinkar.entity.EntityVersion;
 import dev.ikm.tinkar.entity.PatternEntity;
 import dev.ikm.tinkar.entity.PatternEntityVersion;
+import dev.ikm.tinkar.forge.ForgeMethodWrapper;
 import freemarker.template.SimpleNumber;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
 import java.util.List;
 
-public class GetPattern extends ForgeMethodWrapper {
+public class PatternGet extends ForgeMethodWrapper {
 
-    private final Logger LOG = LoggerFactory.getLogger(GetPattern.class);
+    private final Logger LOG = LoggerFactory.getLogger(PatternGet.class);
 
     @Override
     public PatternEntity<? extends PatternEntityVersion> exec(List list) {
