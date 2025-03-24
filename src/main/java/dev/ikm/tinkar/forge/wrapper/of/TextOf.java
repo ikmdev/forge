@@ -13,11 +13,6 @@ public class TextOf extends ForgeMethodWrapper {
 
     private final Logger LOG = LoggerFactory.getLogger(TextOf.class);
 
-//    @Override
-//    public String methodName() {
-//        return "textOf";
-//    }
-
     @Override
     public String exec(List list) {
         SimpleNumber simpleNumber = (SimpleNumber) list.get(0);

@@ -24,18 +24,20 @@ Here are all the concept:
     </#list>
     Entity Fast     -> ${entityGet(concept.nid)}
     Concept Fast    -> ${conceptGet(concept.nid)}
+    <#list concept.versions as conceptVersion>
+    Concept Version STAMP Fast      -> ${stampGet(conceptVersion.stampNid)}
+    </#list>
     <#assign singleConceptNid=concept.nid>
     -----------------
 </#list>
 
-Here are all the patterns:
 <#list patterns as pattern>
     PublicId        -> ${pattern.publicId}
     Nid             -> ${pattern.nid}
     Desc            -> ${textOf(pattern.nid, defaultLanguageCalc)}
     Pattern Fast    -> ${patternGet(pattern.nid)}
     <#list pattern.versions as patternVersion>
-    STAMP Fast      -> ${stampGet(patternVersion.stampNid)}
+    Pattern Version STAMP Fast      -> ${stampGet(patternVersion.stampNid)}
     </#list>
     -----------------
 </#list>
@@ -45,21 +47,40 @@ Here are all the semantics:
     PublicId        -> ${semantic.publicId}
     Nid             -> ${semantic.nid}
     Semantic Fast   -> ${semanticGet(semantic.nid)}
+    <#list semantic.versions as semanticVersion>
+    Semantic Version STAMP Fast      -> ${stampGet(semanticVersion.stampNid)}
+    </#list>
     -----------------
 </#list>
 
-Here is a Description Semantics for a concept using a Default Stamp Calculator:
+Here are all the stamps:
     -----------------
-    Default STAMP: ${defaultSTAMPCalc}
-
-<#list descriptionsOn(singleConceptNid, defaultSTAMPCalc) as description>
-    ${description}
+<#list stamps as stampEntity>
+    PublicId        -> ${stampEntity.publicId}
+    Nid             -> ${stampEntity.nid}
+    <#assign stamp=stampGet(stampEntity.nid)>
+    STAMP FAST      -> ${stamp}
+    Values for stamp:
+    Status          -> ${stamp.state}
+    Time            -> ${stamp.time}
+    Author          -> ${stamp.author}
+    Module          -> ${stamp.module}
+    Path            -> ${stamp.path}
+    -----------------
 </#list>
-    -----------------
 
-Here is a Description Semantic for a concept using a Primordial Stamp Calculator:
-    Primordial STAMP: ${primordialSTAMPCalc}
-<#list descriptionsOn(singleConceptNid, primordialSTAMPCalc) as description>
-    ${description}
-</#list>
-    -----------------
+<#--Here is a Description Semantics for a concept using a Default Stamp Calculator:-->
+<#--    ------------------->
+<#--    Default STAMP: ${defaultSTAMPCalc}-->
+
+<#--<#list descriptionsOn(singleConceptNid, defaultSTAMPCalc) as description>-->
+<#--    ${description}-->
+<#--</#list>-->
+<#--    ------------------->
+
+<#--Here is a Description Semantic for a concept using a Primordial Stamp Calculator:-->
+<#--    Primordial STAMP: ${primordialSTAMPCalc}-->
+<#--<#list descriptionsOn(singleConceptNid, primordialSTAMPCalc) as description>-->
+<#--    ${description}-->
+<#--</#list>-->
+<#--    ------------------->

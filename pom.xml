@@ -62,7 +62,7 @@
         <tinkar-core.version>1.80.0</tinkar-core.version>
         <slf4j.version>2.0.13</slf4j.version>
         <log4j.version>3.0.0-alpha1</log4j.version>
-        <tinkar-starter-data.version>1.0.0</tinkar-starter-data.version>
+        <tinkar-example-data.version>1.1.0+1.1.1</tinkar-example-data.version>
 
         <!-- JPMS Dependencies -->
         <tinkar-jpms-deps.groupId>dev.ikm.jpms</tinkar-jpms-deps.groupId>
@@ -183,6 +183,7 @@
             <artifactId>terms</artifactId>
         </dependency>
 
+        <!-- logging -->
         <dependency>
             <groupId>org.slf4j</groupId>
             <artifactId>slf4j-api</artifactId>
@@ -194,6 +195,7 @@
             <scope>test</scope>
         </dependency>
 
+        <!-- Testing -->
         <dependency>
             <groupId>org.junit.jupiter</groupId>
             <artifactId>junit-jupiter</artifactId>
@@ -218,13 +220,11 @@
                 <configuration>
                     <artifactItems>
                         <artifactItem>
-                            <groupId>dev.ikm.tinkar.data</groupId>
-                            <artifactId>tinkar-starter-data</artifactId>
-                            <version>${tinkar-starter-data.version}</version>
-                            <classifier>pb</classifier>
+                            <groupId>dev.ikm.data.tinkar</groupId>
+                            <artifactId>tinkar-example-data</artifactId>
+                            <version>${tinkar-example-data.version}</version>
+                            <classifier>reasoned-pb</classifier>
                             <type>zip</type>
-                            <overWrite>false</overWrite>
-                            <outputDirectory>${project.build.directory}/data</outputDirectory>
                         </artifactItem>
                     </artifactItems>
                     <outputDirectory>${project.build.directory}/data</outputDirectory>
