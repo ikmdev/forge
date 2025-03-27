@@ -5,6 +5,7 @@ import dev.ikm.tinkar.coordinate.navigation.calculator.NavigationCalculator;
 import dev.ikm.tinkar.coordinate.stamp.calculator.StampCalculator;
 import dev.ikm.tinkar.entity.*;
 import dev.ikm.tinkar.terms.EntityProxy;
+import dev.ikm.tinkar.terms.TinkarTerm;
 import freemarker.template.*;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
