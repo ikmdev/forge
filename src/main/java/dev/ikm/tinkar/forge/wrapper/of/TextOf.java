@@ -1,6 +1,8 @@
 package dev.ikm.tinkar.forge.wrapper.of;
 
 import dev.ikm.tinkar.coordinate.language.calculator.LanguageCalculator;
+import dev.ikm.tinkar.entity.Entity;
+import dev.ikm.tinkar.entity.EntityVersion;
 import dev.ikm.tinkar.forge.ForgeMethodWrapper;
 import freemarker.ext.beans.GenericObjectModel;
 import freemarker.template.SimpleNumber;
@@ -15,10 +17,10 @@ public class TextOf extends ForgeMethodWrapper {
 
     @Override
     public String exec(List list) {
-        SimpleNumber simpleNumber = (SimpleNumber) list.get(0);
-        GenericObjectModel genericObjectModel = (GenericObjectModel) list.get(1);
-        LanguageCalculator languageCalculator = convertGenericObjectModel(genericObjectModel, LanguageCalculator.class);
-        int nid = convertSimpleNumber(simpleNumber);
-        return languageCalculator.getDescriptionTextOrNid(nid);
+        GenericObjectModel entityObjectModel = (GenericObjectModel) list.get(0);
+        GenericObjectModel languageCalcObjectModel = (GenericObjectModel) list.get(1);
+        Entity<? extends EntityVersion> entity = convertGenericObjectModel(entityObjectModel, Entity.class);
+        LanguageCalculator languageCalculator = convertGenericObjectModel(languageCalcObjectModel, LanguageCalculator.class);
+        return languageCalculator.getDescriptionTextOrNid(entity.nid());
     }
 }

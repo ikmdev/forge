@@ -7,6 +7,7 @@ module dev.ikm.tinkar.forge {
     requires org.slf4j;
 
     exports dev.ikm.tinkar.forge;
+    exports dev.ikm.tinkar.forge.wrapper.record;
 
     uses dev.ikm.tinkar.forge.ForgeMethodWrapper;
     provides dev.ikm.tinkar.forge.ForgeMethodWrapper with
@@ -15,14 +16,11 @@ module dev.ikm.tinkar.forge {
             dev.ikm.tinkar.forge.wrapper.of.ChildrenOf,
             dev.ikm.tinkar.forge.wrapper.of.ParentsOf,
             dev.ikm.tinkar.forge.wrapper.of.DescendentsOf,
+            dev.ikm.tinkar.forge.wrapper.of.LatestVersionOf,
             //Language Calculator Methods
             dev.ikm.tinkar.forge.wrapper.of.TextOf,
             //Entity Service Component Lookup Methods
-            dev.ikm.tinkar.forge.wrapper.get.ConceptGet,
             dev.ikm.tinkar.forge.wrapper.get.EntityGet,
-            dev.ikm.tinkar.forge.wrapper.get.PatternGet,
-            dev.ikm.tinkar.forge.wrapper.get.SemanticGet,
-            dev.ikm.tinkar.forge.wrapper.get.StampGet,
             //Specific Semantic Lookup Methods
             dev.ikm.tinkar.forge.wrapper.on.DescriptionsOn;
 }

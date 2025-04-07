@@ -5,7 +5,6 @@ import dev.ikm.tinkar.coordinate.navigation.calculator.NavigationCalculator;
 import dev.ikm.tinkar.coordinate.stamp.calculator.StampCalculator;
 import dev.ikm.tinkar.entity.*;
 import dev.ikm.tinkar.terms.EntityProxy;
-import dev.ikm.tinkar.terms.TinkarTerm;
 import freemarker.template.*;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
@@ -33,6 +32,9 @@ public class TinkarForge implements Forge {
         loadInternalMethodWrappers();
     }
 
+    /**
+     *
+     */
     private void loadInternalMethodWrappers() {
         ServiceLoader.load(ForgeMethodWrapper.class)
                 .stream()
@@ -52,6 +54,7 @@ public class TinkarForge implements Forge {
             config.setWrapUncheckedExceptions(true);
             config.setFallbackOnNullLoopVariable(false);
             config.setSQLDateAndTimeTimeZone(TimeZone.getDefault());
+            config.setAPIBuiltinEnabled(true);
         });
     }
 
@@ -72,8 +75,13 @@ public class TinkarForge implements Forge {
     @Override
     public Forge conceptData(Stream<ConceptEntity<? extends ConceptEntityVersion>> conceptEntityStream, Consumer<Integer> progressUpdate) {
         ForgeIterator forgeIterator = new ForgeIterator(conceptEntityStream, progressUpdate);
-        dataModel.put("concepts", forgeIterator);//TODO-aks8m: Update the Iterator to accept concrete entities
+        dataModel.put("concepts", forgeIterator);
         return this;
+    }
+
+    @Override
+    public Forge conceptData(List<ConceptEntity<? extends ConceptEntityVersion>> conceptEntities, Consumer<Integer> progressUpdate) {
+        return conceptData(conceptEntities.stream(), progressUpdate);
     }
 
     @Override
@@ -84,10 +92,20 @@ public class TinkarForge implements Forge {
     }
 
     @Override
+    public Forge semanticData(List<SemanticEntity<? extends SemanticEntityVersion>> semanticEntities, Consumer<Integer> progressUpdate) {
+        return semanticData(semanticEntities.stream(), progressUpdate);
+    }
+
+    @Override
     public Forge patternData(Stream<PatternEntity<? extends PatternEntityVersion>> patternEntityStream, Consumer<Integer> progressUpdate) {
         ForgeIterator<PatternEntity<? extends PatternEntityVersion>> forgeIterator = new ForgeIterator(patternEntityStream, progressUpdate);
         dataModel.put("patterns", forgeIterator);
         return this;
+    }
+
+    @Override
+    public Forge patternData(List<PatternEntity<? extends PatternEntityVersion>> patternEntities, Consumer<Integer> progressUpdate) {
+        return patternData(patternEntities.stream(), progressUpdate);
     }
 
     @Override
@@ -98,10 +116,20 @@ public class TinkarForge implements Forge {
     }
 
     @Override
+    public Forge stampData(List<StampEntity<? extends StampEntityVersion>> stampEntities, Consumer<Integer> progressUpdate) {
+        return stampData(stampEntities.stream(), progressUpdate);
+    }
+
+    @Override
     public Forge entityData(String name, Stream<Entity<? extends EntityVersion>> entities, Consumer<Integer> progressUpdate) {
         ForgeIterator<Entity<? extends EntityVersion>> forgeIterator = new ForgeIterator(entities, progressUpdate);
         dataModel.put(name, forgeIterator);
         return this;
+    }
+
+    @Override
+    public Forge entityData(String name, List<Entity<? extends EntityVersion>> entities, Consumer<Integer> progressUpdate) {
+        return entityData(name, entities.stream(), progressUpdate);
     }
 
     @Override
@@ -181,6 +209,17 @@ public class TinkarForge implements Forge {
     public Forge variable(String name, NavigationCalculator navigationCalculator) {
         try {
             configuration.setSharedVariable(name, navigationCalculator);
+        } catch (TemplateModelException e) {
+            LOG.error("NavigationCalculator variable wasn't set correctly!", e);
+            throw new RuntimeException(e);
+        }
+        return this;
+    }
+
+    @Override
+    public Forge variable(String name, String value) {
+        try {
+            configuration.setSharedVariable(name, value);
         } catch (TemplateModelException e) {
             LOG.error("NavigationCalculator variable wasn't set correctly!", e);
             throw new RuntimeException(e);
