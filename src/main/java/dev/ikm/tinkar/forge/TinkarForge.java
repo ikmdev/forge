@@ -3,9 +3,7 @@ package dev.ikm.tinkar.forge;
 import dev.ikm.tinkar.coordinate.language.calculator.LanguageCalculator;
 import dev.ikm.tinkar.coordinate.navigation.calculator.NavigationCalculator;
 import dev.ikm.tinkar.coordinate.stamp.calculator.StampCalculator;
-import dev.ikm.tinkar.entity.Entity;
-import dev.ikm.tinkar.entity.EntityVersion;
-import dev.ikm.tinkar.forge.wrapper.ForgeMethodWrapper;
+import dev.ikm.tinkar.entity.*;
 import dev.ikm.tinkar.terms.EntityProxy;
 import freemarker.template.*;
 import org.slf4j.Logger;
@@ -14,10 +12,8 @@ import org.slf4j.LoggerFactory;
 import java.io.IOException;
 import java.io.Writer;
 import java.nio.file.Path;
-import java.util.HashMap;
-import java.util.Map;
-import java.util.ServiceLoader;
-import java.util.TimeZone;
+import java.util.*;
+import java.util.function.Consumer;
 import java.util.stream.Stream;
 
 public class TinkarForge implements Forge {
@@ -36,15 +32,15 @@ public class TinkarForge implements Forge {
         loadInternalMethodWrappers();
     }
 
+    /**
+     *
+     */
     private void loadInternalMethodWrappers() {
         ServiceLoader.load(ForgeMethodWrapper.class)
                 .stream()
                 .forEach(abstractMethodWrapperProvider -> {
                         ForgeMethodWrapper forgeMethodWrapper = abstractMethodWrapperProvider.get();
-                        String className = forgeMethodWrapper.getClass().getSimpleName();
-                        char firstChar = className.charAt(0);
-                        String methodName = className.replace(firstChar, Character.toLowerCase(firstChar));
-                        configuration.setSharedVariable(methodName, abstractMethodWrapperProvider.get());
+                        configuration.setSharedVariable(forgeMethodWrapper.methodName(), abstractMethodWrapperProvider.get());
                 });
     }
 
@@ -58,6 +54,7 @@ public class TinkarForge implements Forge {
             config.setWrapUncheckedExceptions(true);
             config.setFallbackOnNullLoopVariable(false);
             config.setSQLDateAndTimeTimeZone(TimeZone.getDefault());
+            config.setAPIBuiltinEnabled(true);
         });
     }
 
@@ -76,14 +73,68 @@ public class TinkarForge implements Forge {
     }
 
     @Override
-    public Forge data(String name, Stream<Entity<? extends EntityVersion>> entities) {
-        dataModel.put(name, entities.iterator());
+    public Forge conceptData(Stream<ConceptEntity<? extends ConceptEntityVersion>> conceptEntityStream, Consumer<Integer> progressUpdate) {
+        ForgeIterator forgeIterator = new ForgeIterator(conceptEntityStream, progressUpdate);
+        dataModel.put("concepts", forgeIterator);
         return this;
     }
 
     @Override
-    public Forge function(String name, TemplateMethodModelEx methodWrapper) {
-        configuration.setSharedVariable(name, methodWrapper);
+    public Forge conceptData(List<ConceptEntity<? extends ConceptEntityVersion>> conceptEntities, Consumer<Integer> progressUpdate) {
+        return conceptData(conceptEntities.stream(), progressUpdate);
+    }
+
+    @Override
+    public Forge semanticData(Stream<SemanticEntity<? extends SemanticEntityVersion>> semanticEntityStream, Consumer<Integer> progressUpdate) {
+        ForgeIterator<SemanticEntity<? extends SemanticEntityVersion>> forgeIterator = new ForgeIterator(semanticEntityStream, progressUpdate);
+        dataModel.put("semantics", forgeIterator);
+        return this;
+    }
+
+    @Override
+    public Forge semanticData(List<SemanticEntity<? extends SemanticEntityVersion>> semanticEntities, Consumer<Integer> progressUpdate) {
+        return semanticData(semanticEntities.stream(), progressUpdate);
+    }
+
+    @Override
+    public Forge patternData(Stream<PatternEntity<? extends PatternEntityVersion>> patternEntityStream, Consumer<Integer> progressUpdate) {
+        ForgeIterator<PatternEntity<? extends PatternEntityVersion>> forgeIterator = new ForgeIterator(patternEntityStream, progressUpdate);
+        dataModel.put("patterns", forgeIterator);
+        return this;
+    }
+
+    @Override
+    public Forge patternData(List<PatternEntity<? extends PatternEntityVersion>> patternEntities, Consumer<Integer> progressUpdate) {
+        return patternData(patternEntities.stream(), progressUpdate);
+    }
+
+    @Override
+    public Forge stampData(Stream<StampEntity<? extends StampEntityVersion>> stampEntityStream, Consumer<Integer> progressUpdate) {
+        ForgeIterator<StampEntity<? extends StampEntityVersion>> forgeIterator = new ForgeIterator(stampEntityStream, progressUpdate);
+        dataModel.put("stamps", forgeIterator);
+        return this;
+    }
+
+    @Override
+    public Forge stampData(List<StampEntity<? extends StampEntityVersion>> stampEntities, Consumer<Integer> progressUpdate) {
+        return stampData(stampEntities.stream(), progressUpdate);
+    }
+
+    @Override
+    public Forge entityData(String name, Stream<Entity<? extends EntityVersion>> entities, Consumer<Integer> progressUpdate) {
+        ForgeIterator<Entity<? extends EntityVersion>> forgeIterator = new ForgeIterator(entities, progressUpdate);
+        dataModel.put(name, forgeIterator);
+        return this;
+    }
+
+    @Override
+    public Forge entityData(String name, List<Entity<? extends EntityVersion>> entities, Consumer<Integer> progressUpdate) {
+        return entityData(name, entities.stream(), progressUpdate);
+    }
+
+    @Override
+    public Forge function(String name, ForgeMethodWrapper forgeMethodWrapper) {
+        configuration.setSharedVariable(name, forgeMethodWrapper);
         return this;
     }
 
@@ -158,6 +209,17 @@ public class TinkarForge implements Forge {
     public Forge variable(String name, NavigationCalculator navigationCalculator) {
         try {
             configuration.setSharedVariable(name, navigationCalculator);
+        } catch (TemplateModelException e) {
+            LOG.error("NavigationCalculator variable wasn't set correctly!", e);
+            throw new RuntimeException(e);
+        }
+        return this;
+    }
+
+    @Override
+    public Forge variable(String name, String value) {
+        try {
+            configuration.setSharedVariable(name, value);
         } catch (TemplateModelException e) {
             LOG.error("NavigationCalculator variable wasn't set correctly!", e);
             throw new RuntimeException(e);
