@@ -221,7 +221,18 @@ public class TinkarForge implements Forge {
         try {
             configuration.setSharedVariable(name, value);
         } catch (TemplateModelException e) {
-            LOG.error("NavigationCalculator variable wasn't set correctly!", e);
+            LOG.error("String variable wasn't set correctly!", e);
+            throw new RuntimeException(e);
+        }
+        return this;
+    }
+
+    @Override
+    public Forge variable(String name, Object value) {
+        try {
+            configuration.setSharedVariable(name, value);
+        } catch (TemplateModelException e) {
+            LOG.error("Object variable wasn't set correctly!", e);
             throw new RuntimeException(e);
         }
         return this;
