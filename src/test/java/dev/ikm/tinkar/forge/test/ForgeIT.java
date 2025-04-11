@@ -223,6 +223,7 @@ public class ForgeIT {
         long startTime = System.nanoTime();
 
         try (FileWriter fw = new FileWriter(createFilePathInTarget.apply("/test/ForgeTestTerm.java"))) {
+
             Forge simpleForge = new TinkarForge();
             simpleForge.config(TEMPLATES_DIRECTORY)
                     .conceptData(concepts.stream(), progressUpdate("concept"))
@@ -256,6 +257,27 @@ public class ForgeIT {
                     .variable("defaultNavigationCalc", NAVIGATION_CALCULATOR)
                     .variable("defaultSTAMPCalc", STAMP_CALCULATOR)
                     .template("descriptions_it.ftl", new BufferedWriter(fw))
+                    .execute();
+        } catch (IOException e) {
+            e.printStackTrace();
+        }
+
+        logElapsedTime(startTime, System.nanoTime());
+    }
+
+
+    @Order(8)
+    @Test
+    public void givenUUIDObject_whenObjectFTLApplied_thenObjectTxtFileGenerated() {
+        long startTime = System.nanoTime();
+
+        UUID uuid = UUID.randomUUID();
+
+        try (FileWriter fw = new FileWriter(createFilePathInTarget.apply("/test/object_it_output.txt"))) {
+            Forge simpleForge = new TinkarForge();
+            simpleForge.config(TEMPLATES_DIRECTORY)
+                    .variable("myUUID", uuid)
+                    .template("object_it.ftl", new BufferedWriter(fw))
                     .execute();
         } catch (IOException e) {
             e.printStackTrace();

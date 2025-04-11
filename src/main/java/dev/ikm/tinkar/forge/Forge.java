@@ -39,6 +39,7 @@ public interface Forge {
     Forge entityData(String name, Stream<Entity<? extends EntityVersion>> entities, Consumer<Integer> progressUpdate);
 
     Forge entityData(String name, List<Entity<? extends EntityVersion>> entities, Consumer<Integer> progressUpdate);
+
     //Variables
     Forge variable(String name, EntityProxy.Concept concept);
 
@@ -53,6 +54,8 @@ public interface Forge {
     Forge variable(String name, NavigationCalculator navigationCalculator);
 
     Forge variable(String name, String value);
+
+    Forge variable(String name, Object value);
 
     //Functions
     Forge function(String name, ForgeMethodWrapper forgeMethodWrapper);
