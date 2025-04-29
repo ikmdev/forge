@@ -16,9 +16,9 @@ public class TextOf extends ForgeMethodWrapper {
     private final Logger LOG = LoggerFactory.getLogger(TextOf.class);
 
     @Override
-    public String exec(List list) {
-        GenericObjectModel entityObjectModel = (GenericObjectModel) list.get(0);
-        GenericObjectModel languageCalcObjectModel = (GenericObjectModel) list.get(1);
+    public String exec(List arguments) {
+        GenericObjectModel entityObjectModel = (GenericObjectModel) arguments.get(0);
+        GenericObjectModel languageCalcObjectModel = (GenericObjectModel) arguments.get(1);
         Entity<? extends EntityVersion> entity = convertGenericObjectModel(entityObjectModel, Entity.class);
         LanguageCalculator languageCalculator = convertGenericObjectModel(languageCalcObjectModel, LanguageCalculator.class);
         return languageCalculator.getDescriptionTextOrNid(entity.nid());

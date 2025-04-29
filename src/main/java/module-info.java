@@ -11,13 +11,12 @@ module dev.ikm.tinkar.forge {
 
     uses dev.ikm.tinkar.forge.ForgeMethodWrapper;
     provides dev.ikm.tinkar.forge.ForgeMethodWrapper with
-            //Navigation Calculator Methods
+            //Methods based on calculators
             dev.ikm.tinkar.forge.wrapper.of.AncestorsOf,
             dev.ikm.tinkar.forge.wrapper.of.ChildrenOf,
             dev.ikm.tinkar.forge.wrapper.of.ParentsOf,
             dev.ikm.tinkar.forge.wrapper.of.DescendentsOf,
             dev.ikm.tinkar.forge.wrapper.of.LatestVersionOf,
-            //Language Calculator Methods
             dev.ikm.tinkar.forge.wrapper.of.TextOf,
             //Entity Service Component Lookup Methods
             dev.ikm.tinkar.forge.wrapper.get.EntityGet,
