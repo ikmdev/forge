@@ -19,9 +19,9 @@ public class ParentsOf extends ForgeMethodWrapper {
     private final Logger LOG = LoggerFactory.getLogger(ParentsOf.class);
 
     @Override
-    public ImmutableList<ConceptEntity<? extends ConceptEntityVersion>> exec(List list) {
-        GenericObjectModel conceptObjectModel = (GenericObjectModel) list.get(0);
-        GenericObjectModel navigationCalcObjectModel = (GenericObjectModel) list.get(1);
+    public ImmutableList<ConceptEntity<? extends ConceptEntityVersion>> exec(List arguments) {
+        GenericObjectModel conceptObjectModel = (GenericObjectModel) arguments.get(0);
+        GenericObjectModel navigationCalcObjectModel = (GenericObjectModel) arguments.get(1);
         ConceptEntity<ConceptEntityVersion> conceptEntity = convertGenericObjectModel(conceptObjectModel, ConceptEntity.class);
         NavigationCalculator navigationCalculator = convertGenericObjectModel(navigationCalcObjectModel, NavigationCalculator.class);
         return navigationCalculator.parentsOf(conceptEntity.nid()).map(value -> {

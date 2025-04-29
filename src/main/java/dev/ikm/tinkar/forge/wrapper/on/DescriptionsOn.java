@@ -19,9 +19,9 @@ public class DescriptionsOn extends ForgeMethodWrapper {
     private final Logger LOG = LoggerFactory.getLogger(DescriptionsOn.class);
 
     @Override
-    public List<Description> exec(List list) {
-        GenericObjectModel entityObjectModel = (GenericObjectModel) list.get(0);
-        GenericObjectModel stampObjectModel = (GenericObjectModel) list.get(1);
+    public List<Description> exec(List arguments) {
+        GenericObjectModel entityObjectModel = (GenericObjectModel) arguments.get(0);
+        GenericObjectModel stampObjectModel = (GenericObjectModel) arguments.get(1);
         Entity<? extends EntityVersion> entity = convertGenericObjectModel(entityObjectModel, Entity.class);
         StampCalculator stampCalculator = convertGenericObjectModel(stampObjectModel, StampCalculator.class);
         int languageIndex = stampCalculator.getIndexForMeaning(

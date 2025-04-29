@@ -15,8 +15,8 @@ public class EntityGet extends ForgeMethodWrapper {
     private final Logger LOG = LoggerFactory.getLogger(EntityGet.class);
 
     @Override
-    public Object exec(List list) {
-        SimpleNumber simpleNumber = (SimpleNumber) list.getFirst();
+    public Object exec(List arguments) {
+        SimpleNumber simpleNumber = (SimpleNumber) arguments.getFirst();
         int nid = convertSimpleNumber(simpleNumber);
         Optional<Entity<EntityVersion>> optionalEntity = Entity.get(nid);
         FieldDataType fieldDataType;

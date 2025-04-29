@@ -18,9 +18,9 @@ public class AncestorsOf extends ForgeMethodWrapper {
     private final Logger LOG = LoggerFactory.getLogger(AncestorsOf.class);
 
     @Override
-    public ImmutableSet<ConceptEntity<? extends ConceptEntityVersion>> exec(List list) {
-        GenericObjectModel conceptObjectModel = (GenericObjectModel) list.get(0);
-        GenericObjectModel navigationCalcObjectModel = (GenericObjectModel) list.get(1);
+    public ImmutableSet<ConceptEntity<? extends ConceptEntityVersion>> exec(List arguments) {
+        GenericObjectModel conceptObjectModel = (GenericObjectModel) arguments.get(0);
+        GenericObjectModel navigationCalcObjectModel = (GenericObjectModel) arguments.get(1);
         ConceptEntity<ConceptEntityVersion> conceptEntity = convertGenericObjectModel(conceptObjectModel, ConceptEntity.class);
         NavigationCalculator navigationCalculator = convertGenericObjectModel(navigationCalcObjectModel, NavigationCalculator.class);
         return navigationCalculator.ancestorsOf(conceptEntity.nid()).map(value -> {

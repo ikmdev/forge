@@ -11,9 +11,9 @@ import java.util.List;
 public class LatestVersionOf extends ForgeMethodWrapper {
 
     @Override
-    public Object exec(List list) {
-        GenericObjectModel entityObjectModel = (GenericObjectModel) list.get(0);
-        GenericObjectModel stampObjectModel = (GenericObjectModel) list.get(1);
+    public Object exec(List arguments) {
+        GenericObjectModel entityObjectModel = (GenericObjectModel) arguments.get(0);
+        GenericObjectModel stampObjectModel = (GenericObjectModel) arguments.get(1);
         Entity<? extends EntityVersion> entity = convertGenericObjectModel(entityObjectModel, Entity.class);
         StampCalculator stampCalculator = convertGenericObjectModel(stampObjectModel, StampCalculator.class);
         return switch (entity.entityDataType()) {
