@@ -6,7 +6,6 @@ import dev.ikm.tinkar.entity.ConceptEntityVersion;
 import dev.ikm.tinkar.entity.Entity;
 import dev.ikm.tinkar.forge.ForgeMethodWrapper;
 import freemarker.ext.beans.GenericObjectModel;
-import freemarker.template.SimpleNumber;
 import org.eclipse.collections.api.list.ImmutableList;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;

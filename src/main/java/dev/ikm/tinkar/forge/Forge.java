@@ -8,7 +8,6 @@ import dev.ikm.tinkar.terms.EntityProxy;
 
 import java.io.Writer;
 import java.nio.file.Path;
-import java.util.Iterator;
 import java.util.List;
 import java.util.function.Consumer;
 import java.util.stream.Stream;
