@@ -134,6 +134,29 @@
                 <artifactId>log4j-slf4j2-impl</artifactId>
                 <version>${log4j.version}</version>
             </dependency>
+
+
+            <!-- optimized -->
+            <dependency>
+                <groupId>${project.groupId}</groupId>
+                <artifactId>entity</artifactId>
+                <version>${tinkar-core.version}</version>
+            </dependency>
+            <dependency>
+                <groupId>${project.groupId}</groupId>
+                <artifactId>component</artifactId>
+                <version>${tinkar-core.version}</version>
+            </dependency>
+            <dependency>
+                <groupId>${project.groupId}</groupId>
+                <artifactId>coordinate</artifactId>
+                <version>${tinkar-core.version}</version>
+            </dependency>
+            <dependency>
+                <groupId>${project.groupId}</groupId>
+                <artifactId>common</artifactId>
+                <version>${tinkar-core.version}</version>
+            </dependency>
         </dependencies>
     </dependencyManagement>
 
@@ -144,7 +167,7 @@
             <artifactId>eclipse-collections-api</artifactId>
         </dependency>
 
-        <!-- Data Providers       -->
+        <!-- Data Providers       
         <dependency>
             <groupId>${project.groupId}</groupId>
             <artifactId>data-ephemeral-provider</artifactId>
@@ -156,18 +179,21 @@
             <artifactId>data-spinedarray-provider</artifactId>
             <scope>test</scope>
         </dependency>
+        -->
 
-        <!-- Core Libraries       -->
+        <!-- Core Libraries      
         <dependency>
             <groupId>${project.groupId}</groupId>
             <artifactId>entity-provider</artifactId>
         </dependency>
+         -->
 
         <dependency>
             <groupId>org.freemarker</groupId>
             <artifactId>freemarker</artifactId>
         </dependency>
 
+        <!-- 
         <dependency>
             <groupId>${project.groupId}</groupId>
             <artifactId>executor-provider</artifactId>
@@ -177,10 +203,29 @@
             <groupId>${project.groupId}</groupId>
             <artifactId>search-provider</artifactId>
         </dependency>
+        -->
 
         <dependency>
             <groupId>${project.groupId}</groupId>
             <artifactId>terms</artifactId>
+        </dependency>
+
+        <!-- optimized -->
+        <dependency>
+            <groupId>${project.groupId}</groupId>
+            <artifactId>entity</artifactId>
+        </dependency>
+        <dependency>
+            <groupId>${project.groupId}</groupId>
+            <artifactId>component</artifactId>
+        </dependency>
+        <dependency>
+            <groupId>${project.groupId}</groupId>
+            <artifactId>coordinate</artifactId>
+        </dependency>
+        <dependency>
+            <groupId>${project.groupId}</groupId>
+            <artifactId>common</artifactId>
         </dependency>
 
         <!-- logging -->
@@ -198,7 +243,7 @@
         <!-- Testing -->
         <dependency>
             <groupId>org.junit.jupiter</groupId>
-            <artifactId>junit-jupiter</artifactId>
+            <artifactId>junit-jupiter-api</artifactId>
             <scope>test</scope>
         </dependency>
     </dependencies>
