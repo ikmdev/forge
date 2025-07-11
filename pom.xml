@@ -13,7 +13,7 @@
 
     <groupId>dev.ikm.tinkar</groupId>
     <artifactId>forge</artifactId>
-    <version>1.4.0-SNAPSHOT</version>
+    <version>1.4.0-remove-service-loading-SNAPSHOT</version>
     <packaging>jar</packaging>
 
     <name>Tinkar Forge</name>
