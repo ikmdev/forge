@@ -59,7 +59,7 @@
     </organization>
 
     <properties>
-        <tinkar-core.version>1.99.0</tinkar-core.version>
+        <tinkar-core.version>1.117.0</tinkar-core.version>
         <slf4j.version>2.0.17</slf4j.version>
         <log4j.version>3.0.0-alpha1</log4j.version>
         <tinkar-example-data.version>1.1.0+1.1.1</tinkar-example-data.version>
@@ -84,11 +84,6 @@
             <dependency>
                 <groupId>${project.groupId}</groupId>
                 <artifactId>data-ephemeral-provider</artifactId>
-                <version>${tinkar-core.version}</version>
-            </dependency>
-            <dependency>
-                <groupId>${project.groupId}</groupId>
-                <artifactId>data-spinedarray-provider</artifactId>
                 <version>${tinkar-core.version}</version>
             </dependency>
 
@@ -151,13 +146,7 @@
             <scope>test</scope>
         </dependency>
 
-        <dependency>
-            <groupId>${project.groupId}</groupId>
-            <artifactId>data-spinedarray-provider</artifactId>
-            <scope>test</scope>
-        </dependency>
-
-        <!-- Core Libraries -->     
+        <!-- Core Libraries -->
         <dependency>
             <groupId>${project.groupId}</groupId>
             <artifactId>entity-provider</artifactId>

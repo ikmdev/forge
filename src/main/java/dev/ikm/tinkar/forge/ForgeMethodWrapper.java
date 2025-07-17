@@ -6,16 +6,16 @@ import dev.ikm.tinkar.coordinate.stamp.calculator.StampCalculator;
 import dev.ikm.tinkar.entity.Entity;
 import dev.ikm.tinkar.entity.EntityVersion;
 import dev.ikm.tinkar.entity.SemanticEntityVersion;
-import dev.ikm.tinkar.forge.wrapper.MethodWrapper;
 import freemarker.ext.beans.GenericObjectModel;
 import freemarker.template.SimpleNumber;
+import freemarker.template.TemplateMethodModelEx;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
 import java.util.ArrayList;
 import java.util.List;
 
-public abstract class ForgeMethodWrapper implements MethodWrapper {
+public abstract class ForgeMethodWrapper implements TemplateMethodModelEx {
 
     private final Logger LOG = LoggerFactory.getLogger(ForgeMethodWrapper.class);
 

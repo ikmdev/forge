@@ -3,9 +3,33 @@ package dev.ikm.tinkar.forge;
 import dev.ikm.tinkar.coordinate.language.calculator.LanguageCalculator;
 import dev.ikm.tinkar.coordinate.navigation.calculator.NavigationCalculator;
 import dev.ikm.tinkar.coordinate.stamp.calculator.StampCalculator;
-import dev.ikm.tinkar.entity.*;
+import dev.ikm.tinkar.entity.ConceptEntity;
+import dev.ikm.tinkar.entity.ConceptEntityVersion;
+import dev.ikm.tinkar.entity.Entity;
+import dev.ikm.tinkar.entity.EntityVersion;
+import dev.ikm.tinkar.entity.PatternEntity;
+import dev.ikm.tinkar.entity.PatternEntityVersion;
+import dev.ikm.tinkar.entity.SemanticEntity;
+import dev.ikm.tinkar.entity.SemanticEntityVersion;
+import dev.ikm.tinkar.entity.StampEntity;
+import dev.ikm.tinkar.entity.StampEntityVersion;
+import dev.ikm.tinkar.forge.wrapper.get.EntityGet;
+import dev.ikm.tinkar.forge.wrapper.of.AncestorsOf;
+import dev.ikm.tinkar.forge.wrapper.of.ChildrenOf;
+import dev.ikm.tinkar.forge.wrapper.of.DescendentsOf;
+import dev.ikm.tinkar.forge.wrapper.of.LatestVersionOf;
+import dev.ikm.tinkar.forge.wrapper.of.MemberOf;
+import dev.ikm.tinkar.forge.wrapper.of.ParentsOf;
+import dev.ikm.tinkar.forge.wrapper.of.TextOf;
+import dev.ikm.tinkar.forge.wrapper.on.DescriptionsOn;
 import dev.ikm.tinkar.terms.EntityProxy;
-import freemarker.template.*;
+import freemarker.template.Configuration;
+import freemarker.template.DefaultObjectWrapperBuilder;
+import freemarker.template.Template;
+import freemarker.template.TemplateException;
+import freemarker.template.TemplateExceptionHandler;
+import freemarker.template.TemplateModelException;
+import freemarker.template.Version;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
@@ -15,7 +39,6 @@ import java.nio.file.Path;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
-import java.util.ServiceLoader;
 import java.util.TimeZone;
 import java.util.function.Consumer;
 import java.util.stream.Stream;
@@ -33,20 +56,16 @@ public class TinkarForge implements Forge {
     public TinkarForge() {
         this.dataModel = new HashMap<>();
         this.configuration = new Configuration(configurationVersion);
-        loadInternalMethodWrappers();
-    }
-
-    /**
-     *
-     */
-    private void loadInternalMethodWrappers() {
-        ServiceLoader.load(ForgeMethodWrapper.class)
-                .stream()
-                .forEach(abstractMethodWrapperProvider -> {
-                        ForgeMethodWrapper forgeMethodWrapper = abstractMethodWrapperProvider.get();
-                        configuration.setSharedVariable(forgeMethodWrapper.methodName(), abstractMethodWrapperProvider.get());
-                });
-    }
+		this.configuration.setSharedVariable("entityGet", new EntityGet());
+		this.configuration.setSharedVariable("ancestorsOf", new AncestorsOf());
+		this.configuration.setSharedVariable("childrenOf", new ChildrenOf());
+		this.configuration.setSharedVariable("descendentsOf", new DescendentsOf());
+		this.configuration.setSharedVariable("latestVersionOf", new LatestVersionOf());
+		this.configuration.setSharedVariable("memberOf", new MemberOf());
+		this.configuration.setSharedVariable("parentsOf", new ParentsOf());
+		this.configuration.setSharedVariable("textOf", new TextOf());
+		this.configuration.setSharedVariable("descriptionsOn", new DescriptionsOn());
+	}
 
     @Override
     public Forge config(Path templatesDirectory) {
